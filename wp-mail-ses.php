@@ -325,7 +325,7 @@ class WP_Mail_SES
         }
 
         $mail_data = array(
-            'to'                => $to,
+            'to'                => $recipients,
             'subject'           => $subject,
             'message'           => $message,
             'headers'           => $headers,
