@@ -17,7 +17,7 @@
  * @wordpress-plugin
  * Plugin Name: WP Mail SES
  * Plugin URI:  https://github.com/bashaus/wp-mail-ses
- * Version:     0.0.2
+ * Version:     0.0.3
  * Description: Uses Amazon's Simple Email Service (SES) to send emails
  * Author:      Bashkim Isai
  * Author URI:  http://www.bashkim.com/

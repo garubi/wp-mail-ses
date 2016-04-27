@@ -92,10 +92,13 @@ No notices
 
 == Changelog ==
 
-= 0.2 =
-* Added filter to notify of email sent status
+= 0.0.3 =
+* Bug fix for $recipients variable [#3]
 
-= 0.1 =
+= 0.0.2 =
+* Added filter to notify of email sent status [#2]
+
+= 0.0.1 =
 * Initial release
 
 
