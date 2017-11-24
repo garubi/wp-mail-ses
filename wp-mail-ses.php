@@ -17,7 +17,7 @@
  * @wordpress-plugin
  * Plugin Name: WP Mail SES
  * Plugin URI:  https://github.com/bashaus/wp-mail-ses
- * Version:     0.0.1
+ * Version:     0.0.3
  * Description: Uses Amazon's Simple Email Service (SES) to send emails
  * Author:      Bashkim Isai
  * Author URI:  http://www.bashkim.com/
@@ -34,6 +34,8 @@ class WP_Mail_SES
 {
 
     const VERSION = '0.0.1';
+
+    const FILTER_EMAIL_SENT = 'wp_mail_ses_sent_email';
 
     public $ses;
 
@@ -316,13 +318,25 @@ class WP_Mail_SES
             }
         }
 
-        $result = $this->ses->sendEmail($m);
-
-        if (is_array($result)) {
-            return $result['MessageId'];
+        try {
+            $result = $this->ses->sendEmail($m);
+        } catch (Exception $e) {
+            // Silence
         }
 
-        return null;
+        $mail_data = array(
+            'to'                => $recipients,
+            'subject'           => $subject,
+            'message'           => $message,
+            'headers'           => $headers,
+            'attachments'       => $attachments
+        );
+
+        return apply_filters(
+            static::FILTER_EMAIL_SENT,
+            is_array($result) ? $result['MessageId'] : null,
+            $mail_data
+        );
     }
 }
 

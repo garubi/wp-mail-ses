@@ -7,7 +7,7 @@ Stable tag: trunk
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails.
+Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails in WordPress.
 
 == Description ==
 
@@ -18,6 +18,8 @@ Based on the original WP SES project by Sylvain Deaure. Main differences:
 * Convention over configuration
 * Removed any functionality which can be done via AWS Console
 * Open Source and public version control
+
+Want to contribute? https://github.com/bashaus/wp-mail-ses/
 
 == Installation ==
 
@@ -90,7 +92,13 @@ No notices
 
 == Changelog ==
 
-= 0.1 =
+= 0.0.3 =
+* Bug fix for $recipients variable [#3]
+
+= 0.0.2 =
+* Added filter to notify of email sent status [#2]
+
+= 0.0.1 =
 * Initial release
 
 
