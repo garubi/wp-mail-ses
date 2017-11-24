@@ -221,9 +221,13 @@ class WP_Mail_SES {
 
 		$m = new SimpleEmailServiceMessage();
 
-		// Convert headers to string
-		if ( is_array( $headers ) ) {
-			$headers = implode( PHP_EOL, $headers );
+		// Ensure $headers is an array
+		if ( ! is_array( $headers ) ) {
+			$headers = explode( PHP_EOL, $headers );
+		}
+
+		foreach ( $headers as $header ) {
+			$m->addCustomHeader( $header );
 		}
 
 		// Recipients may contain comma separated emails
@@ -261,8 +265,11 @@ class WP_Mail_SES {
 			}
 		}
 
+		// Send as a raw email if there are any custom headers
+		$send_raw_email = ( ! empty( $headers ) || count( $headers ) > 0 );
+
 		try {
-			$result     = $this->ses->sendEmail( $m );
+			$result     = $this->ses->sendEmail( $m, $send_raw_email );
 			$message_id = $result['MessageId'];
 		} catch ( Exception $e ) {
 			$message_id = null;
@@ -272,11 +279,17 @@ class WP_Mail_SES {
 			static::FILTER_EMAIL_SENT,
 			$message_id,
 			array(
-				'to'          => $recipients,
-				'subject'     => $subject,
-				'message'     => $message,
-				'headers'     => $headers,
-				'attachments' => $attachments,
+				'to'             => $recipients,
+				'cc'             => $cc,
+				'bcc'            => $bcc,
+				'reply_to'       => $reply_to,
+				'subject'        => $subject,
+				'message'        => $message,
+				'headers'        => $headers,
+				'attachments'    => $attachments,
+				'from_name'      => $from_name,
+				'from_email'     => $from_email,
+				'send_raw_email' => $send_raw_email,
 			)
 		);
 	}
