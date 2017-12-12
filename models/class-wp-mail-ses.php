@@ -180,16 +180,20 @@ class WP_Mail_SES {
 	}
 
 	public function filter_from_email( $default = null ) {
-		if ( defined( 'WP_MAIL_SES_COMPOSER_EMAIL' ) ) {
-			return WP_MAIL_SES_COMPOSER_EMAIL;
+		if ( is_null( $default ) ) {
+			if ( defined( 'WP_MAIL_SES_COMPOSER_EMAIL' ) ) {
+				return WP_MAIL_SES_COMPOSER_EMAIL;
+			}
 		}
 
 		return $default;
 	}
 
 	public function filter_from_name( $default = null ) {
-		if ( defined( 'WP_MAIL_SES_COMPOSER_NAME' ) ) {
-			return WP_MAIL_SES_COMPOSER_NAME;
+		if ( is_null( $default ) ) {
+			if ( defined( 'WP_MAIL_SES_COMPOSER_NAME' ) ) {
+				return WP_MAIL_SES_COMPOSER_NAME;
+			}
 		}
 
 		return $default;
@@ -219,13 +223,99 @@ class WP_Mail_SES {
 		);
 		*/
 
+		$from_name  = null;
+		$from_email = null;
+		$cc         = array();
+		$bcc        = array();
+		$reply_to   = array();
+
 		$m = new SimpleEmailServiceMessage();
 
-		// Ensure $headers is an array
-		if ( ! is_array( $headers ) ) {
-			$headers = explode( PHP_EOL, $headers );
+		/**
+		 * This code comes from WordPress's wp_mail
+		 * @see https://developer.wordpress.org/reference/functions/wp_mail/
+		 */
+
+		// Headers
+		if ( empty( $headers ) ) {
+			$headers = array();
 		}
 
+		if ( ! is_array( $headers ) ) {
+			// Explode the headers out, so this function can take both
+			// string headers and an array of headers.
+			$tempheaders = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
+		} else {
+			$tempheaders = $headers;
+		}
+
+		$headers = array();
+
+		// If it's actually got contents
+		if ( ! empty( $tempheaders ) ) {
+			// Iterate through the raw headers
+			foreach ( (array) $tempheaders as $header ) {
+				if ( strpos( $header, ':' ) === false ) {
+					if ( false !== stripos( $header, 'boundary=' ) ) {
+						$parts    = preg_split( '/boundary=/i', trim( $header ) );
+						$boundary = trim( str_replace( array( "'", '"' ), '', $parts[1] ) );
+					}
+					continue;
+				}
+				// Explode them out
+				list( $name, $content ) = explode( ':', trim( $header ), 2 );
+
+				// Cleanup crew
+				$name    = trim( $name );
+				$content = trim( $content );
+
+				switch ( strtolower( $name ) ) {
+					// Mainly for legacy -- process a From: header if it's there
+					case 'from':
+						$bracket_pos = strpos( $content, '<' );
+						if ( false !== $bracket_pos ) {
+							// Text before the bracketed email is the "From" name.
+							if ( $bracket_pos > 0 ) {
+								$from_name = substr( $content, 0, $bracket_pos - 1 );
+								$from_name = str_replace( '"', '', $from_name );
+								$from_name = trim( $from_name );
+							}
+
+							$from_email = substr( $content, $bracket_pos + 1 );
+							$from_email = str_replace( '>', '', $from_email );
+							$from_email = trim( $from_email );
+
+							// Avoid setting an empty $from_email.
+						} elseif ( '' !== trim( $content ) ) {
+							$from_email = trim( $content );
+						}
+						break;
+
+					case 'content-type':
+						break;
+
+					case 'cc':
+						$cc = array_merge( (array) $cc, explode( ',', $content ) );
+						break;
+					case 'bcc':
+						$bcc = array_merge( (array) $bcc, explode( ',', $content ) );
+						break;
+					case 'reply-to':
+						$reply_to = array_merge( (array) $reply_to, explode( ',', $content ) );
+						break;
+					default:
+						// Add it to our grand headers array
+						$headers[ trim( $name ) ] = trim( $content );
+						break;
+				}
+			}
+		}
+
+		/**
+		 * Prepare the message
+		 */
+
+		// Headers
 		foreach ( $headers as $header ) {
 			$m->addCustomHeader( $header );
 		}
@@ -233,9 +323,10 @@ class WP_Mail_SES {
 		// Recipients may contain comma separated emails
 		$recipients = explode( ',', $recipients );
 
-		foreach ( $recipients as $recipient ) {
-			$m->addTo( $recipient );
-		}
+		array_walk( $recipients, array( $m, 'addTo' ) );
+		array_walk( $cc, array( $m, 'addCC' ) );
+		array_walk( $bcc, array( $m, 'addBCC' ) );
+		array_walk( $reply_to, array( $m, 'addReplyTo' ) );
 
 		// Message
 		$html = $message;
@@ -243,14 +334,11 @@ class WP_Mail_SES {
 		$text = strip_tags( $html );
 		$text = html_entity_decode( $text, ENT_NOQUOTES, 'UTF-8' );
 
-		$m->setFrom(
-			sprintf(
-				'%s <%s>',
-				apply_filters( 'wp_mail_from_name', WP_MAIL_SES_COMPOSER_NAME ),
-				apply_filters( 'wp_mail_from', WP_MAIL_SES_COMPOSER_EMAIL )
-			)
-		);
+		// Apply filters for the composer's name and email address
+		$from_name  = apply_filters( 'wp_mail_from_name', $from_name );
+		$from_email = apply_filters( 'wp_mail_from', $from_email );
 
+		$m->setFrom( sprintf( '%s <%s>', $from_name, $from_email ) );
 		$m->setSubject( $subject );
 		$m->setMessageFromString( $text, $html );
 
