@@ -3,6 +3,7 @@
 <ruleset name="WordPress Themes">
     <file>.</file>
     <exclude-pattern>./lib/**/*</exclude-pattern>
+    <exclude-pattern>./vendor/**/*</exclude-pattern>
 
     <arg value="p" />
     <arg name="report" value="full" />
