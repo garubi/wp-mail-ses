@@ -31,7 +31,7 @@ class WP_Mail_SES_Settings
             <?php
         }
 
-        include __DIR__ . '/../views/settings.php';
+        include __DIR__ . '/../views/settings/index.php';
     }
 
     public function send_test() {
@@ -42,8 +42,8 @@ class WP_Mail_SES_Settings
         }
 
         $required_params = array(
-            'to' => __('Recipient Email', 'wp-mail-ses'), 
-            'subject' => __('Subject', 'wp-mail-ses'), 
+            'to' => __('Recipient Email', 'wp-mail-ses'),
+            'subject' => __('Subject', 'wp-mail-ses'),
             'content' => __('Message (HTML)', 'wp-mail-ses')
         );
 

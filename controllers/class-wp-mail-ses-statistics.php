@@ -45,7 +45,7 @@ class WP_Mail_SES_Statistics
 
         }
 
-        include __DIR__ . '/../views/statistics.php';
+        include __DIR__ . '/../views/statistics/index.php';
     }
 
     public function sort_timestamp($a, $b)
