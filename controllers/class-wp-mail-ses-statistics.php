@@ -12,6 +12,10 @@ class WP_Mail_SES_Statistics {
 		return static::$instance;
 	}
 
+	public function handle() {
+		return $this->index();
+	}
+
 	public function index() {
 		$wp_mail_ses = WP_Mail_SES::get_instance();
 
@@ -22,7 +26,12 @@ class WP_Mail_SES_Statistics {
 		/* Send Quota */
 
 		try {
-			$quota                  = $wp_mail_ses->ses->getSendQuota();
+			$quota = $wp_mail_ses->ses->getSendQuota();
+
+			if ( ! $quota ) {
+				throw new Exception( 'Could not get quota statistics' );
+			}
+
 			$quota['SendRemaining'] = $quota['Max24HourSend'] - $quota['SentLast24Hours'];
 
 			if ( $quota['Max24HourSend'] > 0 ) {
@@ -37,6 +46,11 @@ class WP_Mail_SES_Statistics {
 		/* Send Statistics */
 		try {
 			$stats = $wp_mail_ses->ses->getSendStatistics();
+
+			if ( ! $stats ) {
+				throw new Exception( 'Could not get send statistics' );
+			}
+
 			usort( $stats['SendDataPoints'], array( $this, 'sort_timestamp' ) );
 		} catch ( Exception $e ) {
 			$stats = null;

@@ -40,10 +40,6 @@ class WP_Mail_SES {
 		} catch ( Exception $e ) {
 			return null;
 		}
-
-		if ( function_exists( 'wp_mail' ) ) {
-			add_action( 'admin_notices', array( $this, 'warning_wp_mail_exists' ) );
-		}
 	}
 
 	public function init() {
@@ -146,12 +142,12 @@ class WP_Mail_SES {
 
 	public function controller_settings() {
 		require_once __DIR__ . '/../controllers/class-wp-mail-ses-settings.php';
-		WP_Mail_SES_Settings::get_instance()->index();
+		WP_Mail_SES_Settings::get_instance()->handle();
 	}
 
 	public function controller_statistics() {
 		require_once __DIR__ . '/../controllers/class-wp-mail-ses-statistics.php';
-		WP_Mail_SES_Statistics::get_instance()->index();
+		WP_Mail_SES_Statistics::get_instance()->handle();
 	}
 
 	public function install() {
