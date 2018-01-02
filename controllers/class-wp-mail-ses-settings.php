@@ -23,7 +23,7 @@ class WP_Mail_SES_Settings {
 		} catch ( Exception $e ) {
 			?>
 				<div class="error fade">
-					<p><?php echo $e->getMessage() ?></p>
+					<p><?php echo esc_html( $e->getMessage() ) ?></p>
 				</div>
 			<?php
 		}
@@ -66,7 +66,7 @@ class WP_Mail_SES_Settings {
 
 		?>
 			<div class="updated fade">
-				<p><?php _e( 'Message sent', 'wp-mail-ses' ) ?></p>
+				<p><?php esc_html_e( 'Message sent', 'wp-mail-ses' ) ?></p>
 			</div>
 		<?php
 	}

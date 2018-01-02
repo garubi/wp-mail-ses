@@ -71,7 +71,7 @@ class WP_Mail_SES {
 	public function warning_curl() {
 		?>
 			<div class="error fade">
-				<p><?php _e( 'WP Mail SES: CURL is required.', 'wp-mail-ses' ) ?></p>
+				<p><?php esc_html_e( 'WP Mail SES: CURL is required.', 'wp-mail-ses' ) ?></p>
 			</div>
 		<?php
 	}
@@ -80,7 +80,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php _e( 'WP Mail SES: You must define WP_MAIL_SES_ACCESS_KEY_ID in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ACCESS_KEY_ID in wp-config.php.', 'wp-mail-ses' ) ?>
 				</p>
 			</div>
 		<?php
@@ -90,7 +90,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php _e( 'WP Mail SES: You must define WP_MAIL_SES_SECRET_ACCESS_KEY in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_SECRET_ACCESS_KEY in wp-config.php.', 'wp-mail-ses' ) ?>
 				</p>
 			</div>
 		<?php
@@ -100,7 +100,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php _e( 'WP Mail SES: You must define WP_MAIL_SES_ENDPOINT in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ENDPOINT in wp-config.php.', 'wp-mail-ses' ) ?>
 				</p>
 			</div>
 		<?php
@@ -110,8 +110,8 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php _e( 'WP Mail SES: Another mail plugin is currently activated.', 'wp-mail-ses' ); ?>
-					<?php _e( 'WP Mail SES will not work until it is disabled.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: Another mail plugin is currently activated.', 'wp-mail-ses' ); ?>
+					<?php esc_html_e( 'WP Mail SES will not work until it is disabled.', 'wp-mail-ses' ) ?>
 				</p>
 			</div>
 		<?php
@@ -143,7 +143,7 @@ class WP_Mail_SES {
 			return true;
 		}
 
-		return WP_MAIL_SES_HIDE_STATISTICS == false;
+		return false === WP_MAIL_SES_HIDE_STATISTICS;
 	}
 
 	public function controller_settings() {
@@ -210,10 +210,8 @@ class WP_Mail_SES {
 				return $result['Addresses'];
 			}
 		} catch ( Exception $e ) {
-
+			return array();
 		}
-
-		return array();
 	}
 
 	public function send_email( $recipients, $subject, $message, $headers = '', $attachments = '' ) {
@@ -270,22 +268,24 @@ class WP_Mail_SES {
 
 		try {
 			$result = $this->ses->sendEmail( $m );
+
+			$mail_data = array(
+				'to'                => $recipients,
+				'subject'           => $subject,
+				'message'           => $message,
+				'headers'           => $headers,
+				'attachments'       => $attachments,
+			);
+
+			return apply_filters(
+				static::FILTER_EMAIL_SENT,
+				is_array( $result ) ? $result['MessageId'] : null,
+				$mail_data
+			);
 		} catch ( Exception $e ) {
 			// Silence
+
+			return false;
 		}
-
-		$mail_data = array(
-			'to'                => $recipients,
-			'subject'           => $subject,
-			'message'           => $message,
-			'headers'           => $headers,
-			'attachments'       => $attachments,
-		);
-
-		return apply_filters(
-			static::FILTER_EMAIL_SENT,
-			is_array( $result ) ? $result['MessageId'] : null,
-			$mail_data
-		);
 	}
 }

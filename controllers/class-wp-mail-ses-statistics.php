@@ -31,7 +31,7 @@ class WP_Mail_SES_Statistics {
 				$quota['SendUsage'] = 0;
 			}
 		} catch ( Exception $e ) {
-
+			$quota = null;
 		}
 
 		/* Send Statistics */
@@ -39,7 +39,7 @@ class WP_Mail_SES_Statistics {
 			$stats = $wp_mail_ses->ses->getSendStatistics();
 			usort( $stats['SendDataPoints'], array( $this, 'sort_timestamp' ) );
 		} catch ( Exception $e ) {
-
+			$stats = null;
 		}
 
 		include __DIR__ . '/../views/statistics/index.php';
