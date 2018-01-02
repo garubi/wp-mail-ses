@@ -30,5 +30,6 @@ require_once __DIR__ . '/lib/php-aws-ses/SimpleEmailService.php';
 require_once __DIR__ . '/lib/php-aws-ses/SimpleEmailServiceMessage.php';
 require_once __DIR__ . '/lib/php-aws-ses/SimpleEmailServiceRequest.php';
 require_once __DIR__ . '/models/class-wp-mail-ses.php';
+require_once __DIR__ . '/functions.php';
 
 WP_Mail_SES::get_instance();
