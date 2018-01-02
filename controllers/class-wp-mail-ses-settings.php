@@ -6,7 +6,7 @@ class WP_Mail_SES_Settings {
 
 	public static function get_instance() {
 		if ( ! isset( static::$instance ) ) {
-			static::$instance = new self;
+			static::$instance = new self();
 		}
 
 		return static::$instance;
@@ -23,7 +23,7 @@ class WP_Mail_SES_Settings {
 		} catch ( Exception $e ) {
 			?>
 				<div class="error fade">
-					<p><?php echo esc_html( $e->getMessage() ) ?></p>
+					<p><?php echo esc_html( $e->getMessage() ); ?></p>
 				</div>
 			<?php
 		}
@@ -39,7 +39,7 @@ class WP_Mail_SES_Settings {
 		}
 
 		$required_params = array(
-			'to' => __( 'Recipient Email', 'wp-mail-ses' ),
+			'to'      => __( 'Recipient Email', 'wp-mail-ses' ),
 			'subject' => __( 'Subject', 'wp-mail-ses' ),
 			'content' => __( 'Message (HTML)', 'wp-mail-ses' ),
 		);
@@ -66,7 +66,7 @@ class WP_Mail_SES_Settings {
 
 		?>
 			<div class="updated fade">
-				<p><?php esc_html_e( 'Message sent', 'wp-mail-ses' ) ?></p>
+				<p><?php esc_html_e( 'Message sent', 'wp-mail-ses' ); ?></p>
 			</div>
 		<?php
 	}

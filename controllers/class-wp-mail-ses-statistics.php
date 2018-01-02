@@ -6,7 +6,7 @@ class WP_Mail_SES_Statistics {
 
 	public static function get_instance() {
 		if ( ! isset( static::$instance ) ) {
-			static::$instance = new self;
+			static::$instance = new self();
 		}
 
 		return static::$instance;
@@ -22,7 +22,7 @@ class WP_Mail_SES_Statistics {
 		/* Send Quota */
 
 		try {
-			$quota = $wp_mail_ses->ses->getSendQuota();
+			$quota                  = $wp_mail_ses->ses->getSendQuota();
 			$quota['SendRemaining'] = $quota['Max24HourSend'] - $quota['SentLast24Hours'];
 
 			if ( $quota['Max24HourSend'] > 0 ) {
@@ -46,6 +46,6 @@ class WP_Mail_SES_Statistics {
 	}
 
 	public function sort_timestamp( $a, $b ) {
-		return ($a['Timestamp'] < $b['Timestamp']) ? -1 : 1;
+		return ( $a['Timestamp'] < $b['Timestamp'] ) ? -1 : 1;
 	}
 }

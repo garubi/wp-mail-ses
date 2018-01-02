@@ -13,7 +13,7 @@ class WP_Mail_SES {
 
 	public static function get_instance() {
 		if ( ! isset( static::$instance ) ) {
-			static::$instance = new self;
+			static::$instance = new self();
 		}
 
 		return static::$instance;
@@ -69,7 +69,7 @@ class WP_Mail_SES {
 	public function warning_curl() {
 		?>
 			<div class="error fade">
-				<p><?php esc_html_e( 'WP Mail SES: CURL is required.', 'wp-mail-ses' ) ?></p>
+				<p><?php esc_html_e( 'WP Mail SES: CURL is required.', 'wp-mail-ses' ); ?></p>
 			</div>
 		<?php
 	}
@@ -78,7 +78,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ACCESS_KEY_ID in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ACCESS_KEY_ID in wp-config.php.', 'wp-mail-ses' ); ?>
 				</p>
 			</div>
 		<?php
@@ -88,7 +88,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_SECRET_ACCESS_KEY in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_SECRET_ACCESS_KEY in wp-config.php.', 'wp-mail-ses' ); ?>
 				</p>
 			</div>
 		<?php
@@ -98,7 +98,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ENDPOINT in wp-config.php.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES: You must define WP_MAIL_SES_ENDPOINT in wp-config.php.', 'wp-mail-ses' ); ?>
 				</p>
 			</div>
 		<?php
@@ -109,7 +109,7 @@ class WP_Mail_SES {
 			<div class="error fade">
 				<p>
 					<?php esc_html_e( 'WP Mail SES: Another mail plugin is currently activated.', 'wp-mail-ses' ); ?>
-					<?php esc_html_e( 'WP Mail SES will not work until it is disabled.', 'wp-mail-ses' ) ?>
+					<?php esc_html_e( 'WP Mail SES will not work until it is disabled.', 'wp-mail-ses' ); ?>
 				</p>
 			</div>
 		<?php
@@ -214,17 +214,17 @@ class WP_Mail_SES {
 
 	public function send_email( $recipients, $subject, $message, $headers = '', $attachments = '' ) {
 		/*
-        list($recipients, $subject, $message, $headers, $attachments) = apply_filters(
-            'wp_mail', array(
-                'to'        => $recipients,
-                'subject'   => $subject,
-                'message'   => $message,
-                'headers'   => $headers
-            )
-        );
-        */
+		list($recipients, $subject, $message, $headers, $attachments) = apply_filters(
+			'wp_mail', array(
+				'to'        => $recipients,
+				'subject'   => $subject,
+				'message'   => $message,
+				'headers'   => $headers
+			)
+		);
+		*/
 
-		$m = new SimpleEmailServiceMessage;
+		$m = new SimpleEmailServiceMessage();
 
 		// Convert headers to string
 		if ( is_array( $headers ) ) {
@@ -244,11 +244,13 @@ class WP_Mail_SES {
 		$text = strip_tags( $html );
 		$text = html_entity_decode( $text, ENT_NOQUOTES, 'UTF-8' );
 
-		$m->setFrom(sprintf(
-			'%s <%s>',
-			apply_filters( 'wp_mail_from_name', WP_MAIL_SES_COMPOSER_NAME ),
-			apply_filters( 'wp_mail_from', WP_MAIL_SES_COMPOSER_EMAIL )
-		));
+		$m->setFrom(
+			sprintf(
+				'%s <%s>',
+				apply_filters( 'wp_mail_from_name', WP_MAIL_SES_COMPOSER_NAME ),
+				apply_filters( 'wp_mail_from', WP_MAIL_SES_COMPOSER_EMAIL )
+			)
+		);
 
 		$m->setSubject( $subject );
 		$m->setMessageFromString( $text, $html );
@@ -268,11 +270,11 @@ class WP_Mail_SES {
 			$result = $this->ses->sendEmail( $m );
 
 			$mail_data = array(
-				'to'                => $recipients,
-				'subject'           => $subject,
-				'message'           => $message,
-				'headers'           => $headers,
-				'attachments'       => $attachments,
+				'to'          => $recipients,
+				'subject'     => $subject,
+				'message'     => $message,
+				'headers'     => $headers,
+				'attachments' => $attachments,
 			);
 
 			return apply_filters(
