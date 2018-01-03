@@ -101,6 +101,7 @@ No notices
 * Cleaned up code with phpcs/phpcbf
 * Added .editorconfig
 * Added development dependency for composer
+* Updated SimpleEmailService to 0.9.0
 
 = 0.0.3 =
 * Bug fix for $recipients variable [#3]

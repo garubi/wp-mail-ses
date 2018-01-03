@@ -3,7 +3,7 @@
 class WP_Mail_SES {
 
 
-	const VERSION = '0.0.1';
+	const VERSION = '0.0.4';
 
 	const FILTER_EMAIL_SENT = 'wp_mail_ses_sent_email';
 
