@@ -56,7 +56,7 @@ class WP_Mail_SES_Settings {
 				'From' => sprintf(
 					'wp-mail-ses <%s>',
 					sanitize_email( $post_data['from_email'] )
-				)
+				),
 			)
 		);
 
