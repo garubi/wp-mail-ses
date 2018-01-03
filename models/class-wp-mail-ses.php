@@ -104,8 +104,7 @@ class WP_Mail_SES {
 		?>
 			<div class="error fade">
 				<p>
-					<?php esc_html_e( 'WP Mail SES: Another mail plugin is currently activated.', 'wp-mail-ses' ); ?>
-					<?php esc_html_e( 'WP Mail SES will not work until it is disabled.', 'wp-mail-ses' ); ?>
+					<?php esc_html_e( 'WP Mail SES: Another plugin is currently using wp_mail.', 'wp-mail-ses' ); ?>
 				</p>
 			</div>
 		<?php

@@ -7,11 +7,11 @@
  * - Does not store credentials in the database
  * - Convention over configuration
  * - Removed any functionality which can be done via AWS Console
- * - Open Source and public version control
+ * - Open Source and version controlled via GitHub
  *
  * @package     wp-mail-ses
  * @author      Bashkim Isai
- * @copyright   2016 Bashkim Isai
+ * @copyright   2016-2018 Bashkim Isai
  * @license     MIT
  *
  * @wordpress-plugin
@@ -20,10 +20,11 @@
  * Version:     0.0.4
  * Description: Uses Amazon's Simple Email Service (SES) to send emails
  * Author:      Bashkim Isai
- * Author URI:  http://www.bashkim.com/
+ * Author URI:  https://www.bashkim.com/
  * License:     MIT
  * License URI: https://opensource.org/licenses/MIT
  * Text Domain: wp-mail-ses
+ * Domain Path: /languages
  */
 
 require_once __DIR__ . '/lib/php-aws-ses/SimpleEmailService.php';
