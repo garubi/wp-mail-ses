@@ -263,25 +263,22 @@ class WP_Mail_SES {
 		}
 
 		try {
-			$result = $this->ses->sendEmail( $m );
+			$result     = $this->ses->sendEmail( $m );
+			$message_id = $result['MessageId'];
+		} catch ( Exception $e ) {
+			$message_id = null;
+		}
 
-			$mail_data = array(
+		return apply_filters(
+			static::FILTER_EMAIL_SENT,
+			$message_id,
+			array(
 				'to'          => $recipients,
 				'subject'     => $subject,
 				'message'     => $message,
 				'headers'     => $headers,
 				'attachments' => $attachments,
-			);
-
-			return apply_filters(
-				static::FILTER_EMAIL_SENT,
-				is_array( $result ) ? $result['MessageId'] : null,
-				$mail_data
-			);
-		} catch ( Exception $e ) {
-			// Silence
-
-			return false;
-		}
+			)
+		);
 	}
 }
