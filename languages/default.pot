@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: controllers/class-wp-mail-ses-settings.php:59
+#: controllers/class-wp-mail-ses-settings.php:65
 msgid "Message sent"
 msgstr ""
 
@@ -52,18 +52,22 @@ msgid ""
 msgstr ""
 
 #: views/settings/index.php:19
+msgid "Composer Email"
+msgstr ""
+
+#: views/settings/index.php:24
 msgid "Recipient Email"
 msgstr ""
 
-#: views/settings/index.php:23
+#: views/settings/index.php:29
 msgid "Subject"
 msgstr ""
 
-#: views/settings/index.php:27
+#: views/settings/index.php:33
 msgid "Message (HTML)"
 msgstr ""
 
-#: views/settings/index.php:36
+#: views/settings/index.php:42
 msgid "Send Email"
 msgstr ""
 

@@ -51,7 +51,13 @@ class WP_Mail_SES_Settings {
 		wp_mail(
 			sanitize_email( $post_data['to'] ),
 			sanitize_text_field( $post_data['subject'] ),
-			sanitize_text_field( $post_data['content'] )
+			sanitize_text_field( $post_data['content'] ),
+			array(
+				'From' => sprintf(
+					'wp-mail-ses <%s>',
+					sanitize_email( $post_data['from_email'] )
+				)
+			)
 		);
 
 		?>

@@ -16,8 +16,14 @@
 
 		<table class="form-table">
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Composer Email', 'wp-mail-ses' ); ?></th>
+				<td><input type="text" name="wp-mail-ses[from_email]" size="50"
+					value="<?php echo esc_attr( defined( 'WP_MAIL_SES_COMPOSER_EMAIL' ) ? WP_MAIL_SES_COMPOSER_EMAIL : '' ) ?>" /></td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Recipient Email', 'wp-mail-ses' ); ?></th>
-				<td><input type="text" name="wp-mail-ses[to]" size="50" /></td>
+				<td><input type="text" name="wp-mail-ses[to]" size="50"
+					value="<?php echo esc_attr( defined( 'WP_MAIL_SES_COMPOSER_EMAIL' ) ? WP_MAIL_SES_COMPOSER_EMAIL : '' ) ?>" /></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Subject', 'wp-mail-ses' ); ?></th>
