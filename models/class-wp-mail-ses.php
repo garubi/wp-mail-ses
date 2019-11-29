@@ -358,7 +358,7 @@ class WP_Mail_SES {
 		// Configuration set
 		$configuration_set = apply_filters(
 			static::FILTER_CONFIGURATION_SET,
-			$configuration_set,
+			$configuration_set
 			);
 		if( !empty( $configuration_set ) ){
 			$m->setConfigurationSet( $configuration_set );
