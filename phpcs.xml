@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<ruleset name="WordPress Themes">
+    <file>.</file>
+    <exclude-pattern>./lib/**/*</exclude-pattern>
+    <exclude-pattern>./vendor/**/*</exclude-pattern>
+
+    <arg value="p" />
+    <arg name="report" value="full" />
+    <arg name="extensions" value="php" />
+
+    <rule ref="WordPress-Extra" />
+</ruleset>

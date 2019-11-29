@@ -1,0 +1,11 @@
+{
+    "name": "bashaus/wp-mail-ses",
+    "description": "Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails in WordPress.",
+    "license": "MIT",
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "wp-coding-standards/wpcs": "^0.14.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+    }
+}

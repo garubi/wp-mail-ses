@@ -4,6 +4,7 @@
 *
 * @link https://github.com/daniel-zahariev/php-aws-ses
 * @package AmazonSimpleEmailService
+* @version v0.8.8
 */
 final class SimpleEmailServiceMessage {
 
@@ -38,6 +39,8 @@ final class SimpleEmailServiceMessage {
 	* addTo, addCC, addBCC, and addReplyTo have the following behavior:
 	* If a single address is passed, it is appended to the current list of addresses.
 	* If an array of addresses is passed, that array is merged into the current list.
+	*
+	* @link http://docs.aws.amazon.com/ses/latest/APIReference/API_Destination.html
 	*/
 	public function addTo($to) {
 		if(!is_array($to)) {
@@ -50,6 +53,18 @@ final class SimpleEmailServiceMessage {
 		return $this;
 	}
 
+	/**
+	* Clear the To: email address(es) for the message
+	*/
+	public function clearTo() {
+		$this->to = array();
+
+		return $this;
+	}
+
+	/**
+	* @see addTo()
+	*/
 	public function addCC($cc) {
 		if(!is_array($cc)) {
 			$this->cc[] = $cc;
@@ -61,6 +76,18 @@ final class SimpleEmailServiceMessage {
 		return $this;
 	}
 
+	/**
+	* Clear the CC: email address(es) for the message
+	*/
+	public function clearCC() {
+		$this->cc = array();
+
+		return $this;
+	}
+
+	/**
+	* @see addTo()
+	*/
 	public function addBCC($bcc) {
 		if(!is_array($bcc)) {
 			$this->bcc[] = $bcc;
@@ -72,6 +99,18 @@ final class SimpleEmailServiceMessage {
 		return $this;
 	}
 
+	/**
+	* Clear the BCC: email address(es) for the message
+	*/
+	public function clearBCC() {
+		$this->bcc = array();
+
+		return $this;
+	}
+
+	/**
+	* @see addTo()
+	*/
 	public function addReplyTo($replyto) {
 		if(!is_array($replyto)) {
 			$this->replyto[] = $replyto;
@@ -81,6 +120,30 @@ final class SimpleEmailServiceMessage {
 		}
 
 		return $this;
+	}
+
+	/**
+	* Clear the Reply-To: email address(es) for the message
+	*/
+	public function clearReplyTo() {
+		$this->replyto = array();
+
+		return $this;
+	}
+
+	/**
+	* Clear all of the message recipients in one go
+	*
+	* @uses clearTo()
+	* @uses clearCC()
+	* @uses clearBCC()
+	* @uses clearReplyTo()
+	*/
+	public function clearRecipients() {
+		$this->clearTo();
+		$this->clearCC();
+		$this->clearBCC();
+		$this->clearReplyTo();
 	}
 
 	public function setFrom($from) {
@@ -113,6 +176,9 @@ final class SimpleEmailServiceMessage {
 		return $this;
 	}
 
+	/**
+	* @link http://docs.aws.amazon.com/ses/latest/APIReference/API_Message.html
+	*/
 	public function setMessageFromString($text, $html = null) {
 		$this->messagetext = $text;
 		$this->messagehtml = $html;
@@ -200,11 +266,30 @@ final class SimpleEmailServiceMessage {
 	 * @param string $mimeType  Specify custom MIME type
 	 * @param string $contentId Content ID of the attachment for inclusion in the mail message
 	 * @param string $attachmentType    Attachment type: attachment or inline
-	 * @return  boolean Status of the operation
+	 * @return boolean Status of the operation
 	 */
 	public function addAttachmentFromFile($name, $path, $mimeType = 'application/octet-stream', $contentId = null, $attachmentType = 'attachment') {
 		if (file_exists($path) && is_file($path) && is_readable($path)) {
 			$this->addAttachmentFromData($name, file_get_contents($path), $mimeType, $contentId, $attachmentType);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Add email attachment by passing file path
+	 *
+	 * @param string $name      The name of the file attachment as it will appear in the email
+	 * @param string $url      URL to the attachment file
+	 * @param string $mimeType  Specify custom MIME type
+	 * @param string $contentId Content ID of the attachment for inclusion in the mail message
+	 * @param string $attachmentType    Attachment type: attachment or inline
+	 * @return boolean Status of the operation
+	 */
+	public function addAttachmentFromUrl($name, $url, $mimeType = 'application/octet-stream', $contentId = null, $attachmentType = 'attachment') {
+		$data = file_get_contents($url);
+		if ($data !== false) {
+			$this->addAttachmentFromData($name, $data, $mimeType, $contentId, $attachmentType);
 			return true;
 		}
 		return false;
@@ -228,13 +313,14 @@ final class SimpleEmailServiceMessage {
 	/**
 	 * Get the raw mail message
 	 *
+	 * @param bool $encode Should the raw message be base64 encoded or not
 	 * @return string
 	 */
-	public function getRawMessage()
+	public function getRawMessage($encode = true)
 	{
 		$boundary = uniqid(rand(), true);
-		$raw_message = (count($this->customHeaders) > 0 ? join("\n", $this->customHeaders) . "\n" : '');
-		$raw_message .= 'To:' . $this->encodeRecipients($this->to) . "\n";
+		$raw_message = count($this->customHeaders) > 0 ? join("\n", $this->customHeaders) . "\n" : '';
+		$raw_message .= count($this->to) > 0 ? 'To:' . $this->encodeRecipients($this->to) . "\n" : '';
 		$raw_message .= 'From:' . $this->encodeRecipients($this->from) . "\n";
 		if(!empty($this->replyto)) $raw_message .= 'Reply-To:' . $this->encodeRecipients($this->replyto) . "\n";
 
@@ -282,13 +368,13 @@ final class SimpleEmailServiceMessage {
 
 		$raw_message .= "\n--{$boundary}--\n";
 
-		return base64_encode($raw_message);
+		return $encode ? base64_encode($raw_message) : $raw_message;
 	}
 
 	/**
 	 * Encode recipient with the specified charset in `recipientsCharset`
 	 *
-	 * @return string            Encoded recipients joined with comma
+	 * @return string Encoded recipients joined with comma
 	 */
 	public function encodeRecipients($recipient)
 	{
@@ -305,6 +391,7 @@ final class SimpleEmailServiceMessage {
 
 	/**
 	* Validates whether the message object has sufficient information to submit a request to SES.
+	*
 	* This does not guarantee the message will arrive, nor that the request will succeed;
 	* instead, it makes sure that no required fields are missing.
 	*
@@ -316,14 +403,20 @@ final class SimpleEmailServiceMessage {
 	* @return boolean
 	*/
 	public function validate() {
-		if(count($this->to) == 0)
+		// at least one destination is required
+		if (count($this->to) == 0 && count($this->cc) == 0 && count($this->bcc) == 0)
 			return false;
-		if($this->from == null || strlen($this->from) == 0)
+
+		// sender is required
+		if ($this->from == null || strlen($this->from) == 0)
 			return false;
-		// messages require at least one of: subject, messagetext, messagehtml.
-		if(($this->subject == null || strlen($this->subject) == 0)
-			&& ($this->messagetext == null || strlen($this->messagetext) == 0)
-			&& ($this->messagehtml == null || strlen($this->messagehtml) == 0))
+
+		// subject is required
+		if (($this->subject == null || strlen($this->subject) == 0)) return false;
+
+		// message is required
+		if ((empty($this->messagetext) || strlen((string)$this->messagetext) == 0)
+			&& (empty($this->messagehtml) || strlen((string)$this->messagehtml) == 0))
 		{
 			return false;
 		}
