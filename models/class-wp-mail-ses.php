@@ -6,6 +6,7 @@ class WP_Mail_SES {
 	const VERSION = '0.0.4';
 
 	const FILTER_EMAIL_SENT = 'wp_mail_ses_sent_email';
+	const FILTER_CONFIGURATION_SET = 'wp_mail_ses_configuration_set';
 
 	public $ses;
 
@@ -223,11 +224,12 @@ class WP_Mail_SES {
 		);
 		*/
 
-		$from_name  = null;
-		$from_email = null;
-		$cc         = array();
-		$bcc        = array();
-		$reply_to   = array();
+		$from_name  		= null;
+		$from_email 		= null;
+		$cc         		= array();
+		$bcc        		= array();
+		$reply_to   		= array();
+		$configuration_set	= null;
 
 		$m = new SimpleEmailServiceMessage();
 
@@ -353,6 +355,16 @@ class WP_Mail_SES {
 			}
 		}
 
+		// Configuration set
+		$configuration_set = apply_filters(
+			static::FILTER_CONFIGURATION_SET,
+			$configuration_set
+			);
+		if( !empty( $configuration_set ) ){
+			$m->setConfigurationSet( $configuration_set );
+		}
+
+
 		// Send as a raw email if there are any custom headers
 		$send_raw_email = ( ! empty( $headers ) || count( $headers ) > 0 );
 
@@ -367,17 +379,18 @@ class WP_Mail_SES {
 			static::FILTER_EMAIL_SENT,
 			$message_id,
 			array(
-				'to'             => $recipients,
-				'cc'             => $cc,
-				'bcc'            => $bcc,
-				'reply_to'       => $reply_to,
-				'subject'        => $subject,
-				'message'        => $message,
-				'headers'        => $headers,
-				'attachments'    => $attachments,
-				'from_name'      => $from_name,
-				'from_email'     => $from_email,
-				'send_raw_email' => $send_raw_email,
+				'to'             	=> $recipients,
+				'cc'             	=> $cc,
+				'bcc'            	=> $bcc,
+				'reply_to'       	=> $reply_to,
+				'subject'        	=> $subject,
+				'message'        	=> $message,
+				'headers'        	=> $headers,
+				'attachments'    	=> $attachments,
+				'from_name'      	=> $from_name,
+				'from_email'     	=> $from_email,
+				'send_raw_email' 	=> $send_raw_email,
+				'configuration_set' => $configuration_set,
 			)
 		);
 	}

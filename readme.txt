@@ -2,7 +2,7 @@
 Contributors: bashaus
 Tags: wp_mail, ses, mail
 Requires at least: 3.0.1
-Tested up to: 4.9.1
+Tested up to: 5.7
 Stable tag: trunk
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -97,6 +97,11 @@ No notices
 
 
 == Changelog ==
+
+= 1.0 =
+ * Detached from Bashkim Isai repository
+ * upgraded to AmazonSimpleEmailService v0.9.1 from https://github.com/daniel-zahariev/php-aws-ses
+ * added support for ConfigurationSet via add_filter('wp_mail_ses_configuration_set')
 
 = 0.0.4 =
 * Integrated with Travis CI
