@@ -10,17 +10,17 @@
  * - Open Source and version controlled via GitHub
  *
  * @package     wp-mail-ses
- * @author      Bashkim Isai
- * @copyright   2016-2018 Bashkim Isai
+ * @author      Bashkim Isai, Stefano Garuti
+ * @copyright   2016-2018 Bashkim Isai, 2020 - 2021 Stefano Garuti
  * @license     MIT
  *
  * @wordpress-plugin
  * Plugin Name: WP Mail SES
- * Plugin URI:  https://github.com/bashaus/wp-mail-ses
- * Version:     0.0.4
+ * Plugin URI:  https://github.com/garubi/wp-mail-ses
+ * Version:     1.0
  * Description: Uses Amazon's Simple Email Service (SES) to send emails
- * Author:      Bashkim Isai
- * Author URI:  https://www.bashkim.com/
+ * Author:      Bashkim Isai, Stefano Garuti
+ * Author URI:  https://github.com/garubi/
  * License:     MIT
  * License URI: https://opensource.org/licenses/MIT
  * Text Domain: wp-mail-ses
