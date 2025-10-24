@@ -15,10 +15,10 @@
  * @license     MIT
  *
  * @wordpress-plugin
- * Plugin Name: WP Mail SES
+ * Plugin Name: WP Mail SES - should support v4 signature
  * Plugin URI:  https://github.com/garubi/wp-mail-ses
  * Version:     1.0
- * Description: Uses Amazon's Simple Email Service (SES) to send emails
+ * Description: Uses Amazon's Simple Email Service (SES) to send emails.
  * Author:      Bashkim Isai, Stefano Garuti
  * Author URI:  https://github.com/garubi/
  * License:     MIT
