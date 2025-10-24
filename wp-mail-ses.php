@@ -3,11 +3,6 @@
  * WP Mail SES
  *
  * Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails.
- * Based on the original WP SES project by Sylvain Deaure. Main differences:
- * - Does not store credentials in the database
- * - Convention over configuration
- * - Removed any functionality which can be done via AWS Console
- * - Open Source and version controlled via GitHub
  *
  * @package     wp-mail-ses
  * @author      Bashkim Isai, Stefano Garuti
@@ -17,8 +12,8 @@
  * @wordpress-plugin
  * Plugin Name: WP Mail SES
  * Plugin URI:  https://github.com/garubi/wp-mail-ses
- * Version:     1.0
- * Description: Uses Amazon's Simple Email Service (SES) to send emails
+ * Version:     2.0
+ * Description: Uses Amazon's Simple Email Service (SES) to send emails.
  * Author:      Bashkim Isai, Stefano Garuti
  * Author URI:  https://github.com/garubi/
  * License:     MIT
