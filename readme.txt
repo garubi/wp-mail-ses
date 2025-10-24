@@ -1,8 +1,8 @@
 === WP Mail SES ===
-Contributors: bashaus
+Contributors: bashaus, garubi
 Tags: wp_mail, ses, mail
 Requires at least: 3.0.1
-Tested up to: 5.7
+Tested up to: 6.8.3
 Stable tag: trunk
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -12,12 +12,13 @@ Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails in Word
 == Description ==
 
 Uses Amazon Web Services (AWS) Simple Email Service (SES) to send emails.
-Based on the original WP SES project by Sylvain Deaure. Main differences:
 
-* Does not store credentials in the database
-* Convention over configuration
-* Removed any functionality which can be done via AWS Console
-* Open Source and [version controlled via GitHub](https://github.com/bashaus/wp-mail-ses/)
+It supports Configuration sets and Signature Version 4
+
+Forked from the original WP Mail SES by [bashaus](https://github.com/bashaus/wp-mail-ses/)
+It uses the `php-aws-ses` project by (Daniel Zahariev)[https://github.com/daniel-zahariev/php-aws-ses]
+
+
 
 == Installation ==
 
@@ -77,6 +78,10 @@ Optional extra configuration:
 
     define( 'WP_MAIL_SES_HIDE_STATISTICS', true );
 
+    /**
+     * Define a configuration set to be used
+     */
+     Use `add_filter('wp_mail_ses_configuration_set')`
 
 = 3. Install plugin =
 
@@ -97,6 +102,9 @@ No notices
 
 
 == Changelog ==
+= 2.0 =
+ * upgraded to AmazonSimpleEmailService v0.9.5 from https://github.com/daniel-zahariev/php-aws-ses
+ * Now it supports and uses as default the Signature Version 4 (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv-create-signed-request.html)
 
 = 1.0 =
  * Detached from Bashkim Isai repository
