@@ -10,7 +10,7 @@ add_filter( 'pre_wp_mail', 'wp_mail_ses', 10, 2 );
  *
  * @param null|bool $pre_wp_mail Existing short-circuit value from previous filters.
  * @param array     $atts        Normalized wp_mail() arguments.
- * @return bool|null Returns previous short-circuit value, or SES send result.
+ * @return bool|string False on delivery failure, or AWS SES MessageID (string) on success.
  */
 function wp_mail_ses( $pre_wp_mail, $atts ) {
 	if ( null !== $pre_wp_mail ) {
@@ -23,11 +23,14 @@ function wp_mail_ses( $pre_wp_mail, $atts ) {
 	$headers     = isset( $atts['headers'] ) ? $atts['headers'] : '';
 	$attachments = isset( $atts['attachments'] ) ? $atts['attachments'] : '';
 
-	return (bool) WP_Mail_SES::get_instance()->send_email(
+	$result = WP_Mail_SES::get_instance()->send_email(
 		$to,
 		$subject,
 		$message,
 		$headers,
 		$attachments
 	);
+
+	// Return MessageID on success, false on failure (null from send_email)
+	return $result ?: false;
 }
