@@ -1,8 +1,8 @@
 === WP Mail SES ===
 Contributors: bashaus, garubi
 Tags: wp_mail, ses, mail
-Requires at least: 3.0.1
-Tested up to: 6.8.3
+Requires at least: 5.7.0
+Tested up to: 7.0.0
 Stable tag: trunk
 License: MIT
 License URI: https://opensource.org/licenses/MIT
