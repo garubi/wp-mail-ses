@@ -10,9 +10,9 @@
  * @license     MIT
  *
  * @wordpress-plugin
- * Plugin Name: WP Mail SES
+ * Plugin Name: WP Mail SES - beta version using pre_wp_mail filter
  * Plugin URI:  https://github.com/garubi/wp-mail-ses
- * Version:     2.0
+ * Version:     3.0
  * Description: Uses Amazon's Simple Email Service (SES) to send emails.
  * Author:      Bashkim Isai, Stefano Garuti
  * Author URI:  https://github.com/garubi/
