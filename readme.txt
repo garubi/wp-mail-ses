@@ -102,6 +102,9 @@ No notices
 
 
 == Changelog ==
+= 3.0 =
+* Use of add_filter( 'pre_wp_mail', 'wp_mail_ses', 10, 2 ); instead of replacing the pluggable wp_mail function
+
 = 2.0 =
  * upgraded to AmazonSimpleEmailService v0.9.5 from https://github.com/daniel-zahariev/php-aws-ses
  * Now it supports and uses as default the Signature Version 4 (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv-create-signed-request.html)
